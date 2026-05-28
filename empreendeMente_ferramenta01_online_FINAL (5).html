@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmpreendeMente — Diagnóstico de Prontidão · Módulo I</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#1C3A54;--navy-2:#243D52;--navy-pale:#EDF0F6;
+  --sage:#5A8A7C;--sage-pale:#EBF2EF;--sage-2:#8FA8A0;
+  --paper:#F8F6F1;--paper-2:#F0EDE6;
+  --ink:#1A1A1A;--ink-2:#2C3338;--ink-3:#434A56;--ink-4:#767C82;
+  --rule:#D8D4CC;--gold:#9C7D46;
+}
+body{font-family:'Source Sans 3',sans-serif;font-weight:400;background:#E4E8EE;min-height:100vh;}
+
+/* HEADER */
+.header{background:var(--navy);padding:22px 32px;display:flex;align-items:center;justify-content:space-between;}
+.header-brand{display:flex;align-items:center;gap:18px;}
+.header-logo{width:44px;height:44px;border-radius:4px;object-fit:cover;opacity:0.92;flex-shrink:0;}
+.header-divider{width:0.75px;height:32px;background:rgba(255,255,255,0.2);}
+.header-text{display:flex;flex-direction:column;gap:4px;}
+.header-title{font-family:'Cormorant Garamond',serif;font-size:17px;color:white;font-weight:400;letter-spacing:0.02em;}
+.header-sub{font-size:7.5px;letter-spacing:0.26em;color:rgba(255,255,255,0.4);text-transform:uppercase;}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.header-right-top{font-size:7.5px;font-weight:600;letter-spacing:0.28em;color:var(--gold);text-transform:uppercase;}
+.header-right-bot{font-family:'Cormorant Garamond',serif;font-size:11px;color:rgba(255,255,255,0.45);font-style:italic;}
+.sage-bar{height:3px;background:var(--sage);}
+
+/* CONTAINER */
+.container{max-width:680px;margin:28px auto;padding:0 16px 64px;}
+
+/* CARD */
+.card{background:white;border-radius:8px;border:0.5px solid var(--rule);overflow:hidden;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+
+/* INTRO */
+.intro-card{padding:26px 28px;}
+.intro-tag{font-size:8px;font-weight:600;letter-spacing:0.32em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.intro-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--navy);line-height:1.22;margin-bottom:10px;}
+.intro-title em{font-style:italic;color:var(--sage);}
+.intro-desc{font-size:15px;font-weight:400;color:var(--ink-2);line-height:1.82;margin-bottom:20px;}
+
+/* ESCALA */
+.scale-legend{display:flex;border:0.5px solid var(--rule);border-radius:6px;overflow:hidden;}
+.scale-item{flex:1;padding:10px 4px;text-align:center;border-right:0.5px solid var(--rule);}
+.scale-item:last-child{border-right:none;}
+.scale-num{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;display:block;line-height:1;}
+.scale-word{font-size:9.5px;font-weight:500;color:var(--ink-3);letter-spacing:0.03em;text-transform:uppercase;margin-top:4px;display:block;line-height:1.3;}
+
+/* IDENTIFICAÇÃO */
+.meta-card{padding:18px 28px;}
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:10px;font-weight:600;letter-spacing:0.22em;color:var(--ink-3);text-transform:uppercase;}
+.field input,.field select{
+  padding:11px 14px;border:0.5px solid var(--rule);border-radius:5px;
+  font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:400;color:var(--ink);
+  background:var(--paper);outline:none;transition:border-color 0.15s;
+}
+.field input:focus,.field select:focus{border-color:var(--navy);background:white;}
+
+/* PROGRESSO */
+.progress-wrap{padding:14px 28px 0;}
+.progress-label{font-size:12px;font-weight:500;color:var(--ink-3);margin-bottom:6px;}
+.progress-bar{height:4px;background:var(--rule);border-radius:2px;}
+.progress-fill{height:100%;background:linear-gradient(to right,var(--sage),var(--navy));border-radius:2px;width:0%;transition:width 0.25s;}
+
+/* GRUPO */
+.group-header{
+  background:var(--navy);padding:10px 28px;
+  font-size:9.5px;font-weight:600;letter-spacing:0.22em;
+  color:rgba(255,255,255,0.75);text-transform:uppercase;
+}
+
+/* COMPETÊNCIA */
+.comp-row{
+  padding:13px 28px;border-bottom:0.5px solid var(--rule);
+  display:grid;grid-template-columns:38px 1fr auto;
+  align-items:center;gap:14px;
+}
+.comp-row:last-of-type{border-bottom:none;}
+.comp-row:nth-child(even){background:var(--paper);}
+.comp-row.answered{background:var(--sage-pale) !important;}
+.comp-num{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--navy);color:white;
+  font-size:12px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.comp-name{font-size:15px;font-weight:500;color:var(--ink-2);line-height:1.45;}
+
+/* SCORE BUTTONS */
+.score-btns{display:flex;gap:5px;}
+.score-btn{
+  width:42px;height:42px;border-radius:50%;
+  border:1.5px solid var(--rule);background:white;
+  font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;
+  color:var(--ink-3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.12s;padding:0;
+}
+.score-btn:hover{border-color:var(--sage);color:var(--sage);background:var(--sage-pale);}
+.score-btn.s1.selected{background:#B0B6BC;color:white;border-color:#B0B6BC;}
+.score-btn.s2.selected{background:var(--sage-2);color:white;border-color:var(--sage-2);}
+.score-btn.s3.selected{background:var(--sage);color:white;border-color:var(--sage);}
+.score-btn.s4.selected{background:var(--navy-2);color:white;border-color:var(--navy-2);}
+.score-btn.s5.selected{background:var(--navy);color:white;border-color:var(--navy);}
+
+/* SUBMIT */
+.submit-area{padding:22px 28px;display:flex;flex-direction:column;gap:10px;}
+.btn-submit{
+  background:var(--navy);color:white;border:none;
+  padding:16px;border-radius:6px;
+  font-family:'Source Sans 3',sans-serif;font-size:16px;font-weight:600;
+  cursor:pointer;width:100%;letter-spacing:0.04em;transition:opacity 0.15s;
+}
+.btn-submit:hover{opacity:0.88;}
+.submit-note{font-size:12.5px;color:var(--ink-4);text-align:center;line-height:1.6;}
+
+/* SUCESSO */
+.success{display:none;text-align:center;padding:48px 28px;}
+.success-check{
+  width:60px;height:60px;border-radius:50%;background:var(--sage);
+  color:white;font-size:26px;display:flex;align-items:center;
+  justify-content:center;margin:0 auto 16px;
+}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--navy);margin-bottom:8px;}
+.success-sub{font-size:13px;color:var(--ink-4);line-height:1.7;}
+
+/* ERRO */
+.error-msg{
+  background:#FDF0EE;border-left:3px solid #C0392B;
+  padding:12px 16px;border-radius:0 4px 4px 0;
+  font-size:12.5px;color:#C0392B;display:none;margin-top:8px;
+}
+
+@media(max-width:560px){
+  .meta-grid{grid-template-columns:1fr;}
+  .comp-row{grid-template-columns:30px 1fr;grid-template-rows:auto auto;gap:8px;padding:10px 14px;}
+  .score-btns{grid-column:1/-1;justify-content:center;padding-left:38px;}
+  .score-btn{width:48px;height:48px;font-size:20px;}
+  .group-header,.intro-card,.meta-card,.submit-area,.progress-wrap{padding-left:16px;padding-right:16px;}
+  .header{padding:16px 18px;}
+  .header-title{font-size:15px;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">
+    <img class="header-logo" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAEsASwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD4/ooor7M+KCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAo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k9Tk5rIoo5UugczfU2/CfjbXvAl0914d1W40a5eMxNNabVcoRgruIJAI4IHBHWrXhz4k+KPCGoXN9oet3Gk3lyrJNPZrHG7qQAy5C8KQBlRgHuK5qihxT3QKTWzOpPxS8W/YNQsk165htNQt2tbuKBI4hPC33o3KICVOBkZxxVG58ba9eeGrfw7Pqk8uhW8hmh09gnlRyHGXUbchiAAWzk4Gc1iUUcq7BzPuT2F/c6Vf217ZzyWt5bSpPBPCxV4pFIZWUjoQQCD7Ul5eTaheXF3cSGa5uJGmlkbq7sxZmPuSSfxqGimI6W9+JPijUfD0Wg3Wt3E+iQszxaeyR+TGzDDMqhcKx7kYJ9azfDvibVfCOqw6not9LpuowMHiuoAvmRsDkMpIO0gjgjkVmUUuVLSw+Z3vc7WP41eOodZOsR+KL1NWMhm+3qkQuPMPV/M2btxyec5ri3dpHZ2JZmJYk9STyTSUUJJbIHJvdhRRRVCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA//2Q==" alt="EmpreendeMente"/>
+    <div class="header-divider"></div>
+    <div class="header-text">
+      <div class="header-title">EmpreendeMente</div>
+      <div class="header-sub">Mentoria · Networking · Forma-Ação Empreendedora</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-right-top">CON Educação Executiva</div>
+    <div class="header-right-bot">Módulo I</div>
+  </div>
+</div>
+<div class="sage-bar"></div>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="card">
+    <div class="intro-card">
+      <div class="intro-tag">Módulo I · Diagnóstico de Prontidão</div>
+      <h1 class="intro-title">Diagnóstico de Prontidão e<br><em>Competências Empreendedoras</em></h1>
+      <p class="intro-desc">Convidamos você a realizar sua autoavaliação inicial de competências utilizando a escala abaixo, na qual <strong>1</strong> corresponde a <strong>"Precisa Desenvolver"</strong> e <strong>5</strong> a <strong>"Excelente"</strong>.</p>
+      <div class="scale-legend">
+        <div class="scale-item"><span class="scale-num" style="color:#B0B6BC;">1</span><span class="scale-word">Precisa<br>Desenvolver</span></div>
+        <div class="scale-item"><span class="scale-num" style="color:var(--sage-2);">2</span><span class="scale-word">Em<br>Desenvolvimento</span></div>
+        <div class="scale-item"><span class="scale-num" style="color:var(--sage);">3</span><span class="scale-word">Intermediário</span></div>
+        <div class="scale-item"><span class="scale-num" style="color:var(--navy-2);">4</span><span class="scale-word">Avançado</span></div>
+        <div class="scale-item"><span class="scale-num" style="color:var(--navy);">5</span><span class="scale-word">Excelente</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMULÁRIO -->
+  <form id="mainForm"
+        action="https://formsubmit.co/comunidadeempreendemente@gmail.com"
+        method="POST">
+
+    <!-- FormSubmit config -->
+    <input type="hidden" name="_subject" value="EmpreendeMente · Diagnóstico de Prontidão · Módulo I"/>
+    <input type="hidden" name="_captcha" value="false"/>
+    <input type="hidden" name="_template" value="table"/>
+    <input type="hidden" name="_next" value="about:blank"/>
+
+    <!-- IDENTIFICAÇÃO -->
+    <div class="card">
+      <div class="meta-card">
+        <div class="meta-grid">
+          <div class="field" style="grid-column:1/-1;">
+            <label>Nome completo</label>
+            <input type="text" name="Nome" id="f-nome" placeholder="Seu nome completo" required/>
+          </div>
+          <div class="field">
+            <label>Turma / Grupo</label>
+            <input type="text" name="Turma" id="f-turma" placeholder="Ex: Turma A"/>
+          </div>
+          <div class="field">
+            <label>Momento</label>
+            <select name="Momento" id="f-momento">
+              <option value="Início do programa">Início do programa</option>
+              <option value="Final do programa">Final do programa</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Data</label>
+            <input type="date" name="Data" id="f-data"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPETÊNCIAS -->
+    <div class="card">
+      <div class="progress-wrap">
+        <div class="progress-label" id="progress-label">0 de 33 competências avaliadas</div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+
+      <input type="hidden" name="01. Criatividade e ideação" id="val-0" value=""/>
+<input type="hidden" name="02. Capacidade de autorreflexão e autocrítica" id="val-1" value=""/>
+<input type="hidden" name="03. Assertividade" id="val-2" value=""/>
+<input type="hidden" name="04. Gerenciamento de estresse e inteligência emocional sob pressão" id="val-3" value=""/>
+<input type="hidden" name="05. Autoconfiança e segurança na tomada de decisão" id="val-4" value=""/>
+<input type="hidden" name="06. Resiliência e adaptabilidade frente a desafios" id="val-5" value=""/>
+<input type="hidden" name="07. Propensão ao risco calculado e atitude empreendedora" id="val-6" value=""/>
+<input type="hidden" name="08. Sensibilidade interpessoal e empatia nas relações" id="val-7" value=""/>
+<input type="hidden" name="09. Habilidade na resolução de problemas complexos" id="val-8" value=""/>
+<input type="hidden" name="10. Capacidade de motivar e engajar equipes" id="val-9" value=""/>
+<input type="hidden" name="11. Competências e articulação de networking" id="val-10" value=""/>
+<input type="hidden" name="12. Eficiência operacional e produtividade" id="val-11" value=""/>
+<input type="hidden" name="13. Comunicação clara, fluida e expressiva" id="val-12" value=""/>
+<input type="hidden" name="14. Habilidade de negociação e mediação de conflitos" id="val-13" value=""/>
+<input type="hidden" name="15. Automotivação e orientação para resultados" id="val-14" value=""/>
+<input type="hidden" name="16. Aplicação prática e conhecimento de processos de mentoria" id="val-15" value=""/>
+<input type="hidden" name="17. Capacidade de articular parcerias e mobilizar apoio estratégico" id="val-16" value=""/>
+<input type="hidden" name="18. Clareza sobre os próximos passos e a direção a seguir" id="val-17" value=""/>
+<input type="hidden" name="19. Sentimento de realização e propósito no trabalho" id="val-18" value=""/>
+<input type="hidden" name="20. Espírito empreendedor" id="val-19" value=""/>
+<input type="hidden" name="21. Competências de liderança e desenvolvimento de times" id="val-20" value=""/>
+<input type="hidden" name="22. Entusiasmo e energia mobilizadora" id="val-21" value=""/>
+<input type="hidden" name="23. Competências de delegação e descentralização de processos" id="val-22" value=""/>
+<input type="hidden" name="24. Competências de apresentação, oratória e clareza de exposição" id="val-23" value=""/>
+<input type="hidden" name="25. Senso de humor, leveza e inteligência social no ambiente de trabalho" id="val-24" value=""/>
+<input type="hidden" name="26. Construção de novas relações" id="val-25" value=""/>
+<input type="hidden" name="27. Gestão de tempo e prioridade" id="val-26" value=""/>
+<input type="hidden" name="28. Definição clara de objetivos e metas" id="val-27" value=""/>
+<input type="hidden" name="29. Capacidade de execução e foco em fazer as coisas acontecerem" id="val-28" value=""/>
+<input type="hidden" name="30. Clareza consciente sobre o que é verdadeiramente importante para mim" id="val-29" value=""/>
+<input type="hidden" name="31. Clareza de visão sobre o que desejo alcançar" id="val-30" value=""/>
+<input type="hidden" name="32. Autoconhecimento profundo sobre as próprias limitações e pontos cegos" id="val-31" value=""/>
+<input type="hidden" name="33. Equilíbrio e integração entre vida profissional e pessoal" id="val-32" value=""/>
+
+
+      <div class="group-header">01 · Mentalidade e Postura</div>
+<div class="comp-row" id="row-0">
+  <div class="comp-num">01</div>
+  <div class="comp-name">Criatividade e ideação</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(0,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(0,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(0,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(0,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(0,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-1">
+  <div class="comp-num">02</div>
+  <div class="comp-name">Capacidade de autorreflexão e autocrítica</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(1,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(1,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(1,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(1,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(1,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-2">
+  <div class="comp-num">03</div>
+  <div class="comp-name">Assertividade</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(2,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(2,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(2,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(2,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(2,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-3">
+  <div class="comp-num">04</div>
+  <div class="comp-name">Gerenciamento de estresse e inteligência emocional sob pressão</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(3,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(3,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(3,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(3,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(3,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-4">
+  <div class="comp-num">05</div>
+  <div class="comp-name">Autoconfiança e segurança na tomada de decisão</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(4,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(4,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(4,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(4,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(4,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-5">
+  <div class="comp-num">06</div>
+  <div class="comp-name">Resiliência e adaptabilidade frente a desafios</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(5,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(5,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(5,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(5,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(5,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-6">
+  <div class="comp-num">07</div>
+  <div class="comp-name">Propensão ao risco calculado e atitude empreendedora</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(6,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(6,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(6,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(6,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(6,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-7">
+  <div class="comp-num">08</div>
+  <div class="comp-name">Sensibilidade interpessoal e empatia nas relações</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(7,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(7,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(7,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(7,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(7,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-8">
+  <div class="comp-num">09</div>
+  <div class="comp-name">Habilidade na resolução de problemas complexos</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(8,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(8,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(8,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(8,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(8,5,this)">5</button>
+  </div>
+</div>
+<div class="group-header">02 · Liderança e Gestão de Pessoas</div>
+<div class="comp-row" id="row-9">
+  <div class="comp-num">10</div>
+  <div class="comp-name">Capacidade de motivar e engajar equipes</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(9,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(9,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(9,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(9,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(9,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-10">
+  <div class="comp-num">11</div>
+  <div class="comp-name">Competências e articulação de networking</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(10,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(10,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(10,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(10,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(10,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-11">
+  <div class="comp-num">12</div>
+  <div class="comp-name">Eficiência operacional e produtividade</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(11,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(11,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(11,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(11,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(11,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-12">
+  <div class="comp-num">13</div>
+  <div class="comp-name">Comunicação clara, fluida e expressiva</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(12,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(12,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(12,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(12,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(12,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-13">
+  <div class="comp-num">14</div>
+  <div class="comp-name">Habilidade de negociação e mediação de conflitos</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(13,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(13,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(13,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(13,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(13,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-14">
+  <div class="comp-num">15</div>
+  <div class="comp-name">Automotivação e orientação para resultados</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(14,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(14,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(14,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(14,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(14,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-15">
+  <div class="comp-num">16</div>
+  <div class="comp-name">Aplicação prática e conhecimento de processos de mentoria</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(15,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(15,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(15,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(15,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(15,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-16">
+  <div class="comp-num">17</div>
+  <div class="comp-name">Capacidade de articular parcerias e mobilizar apoio estratégico</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(16,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(16,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(16,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(16,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(16,5,this)">5</button>
+  </div>
+</div>
+<div class="group-header">03 · Comunicação e Relacionamento</div>
+<div class="comp-row" id="row-17">
+  <div class="comp-num">18</div>
+  <div class="comp-name">Clareza sobre os próximos passos e a direção a seguir</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(17,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(17,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(17,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(17,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(17,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-18">
+  <div class="comp-num">19</div>
+  <div class="comp-name">Sentimento de realização e propósito no trabalho</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(18,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(18,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(18,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(18,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(18,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-19">
+  <div class="comp-num">20</div>
+  <div class="comp-name">Espírito empreendedor</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(19,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(19,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(19,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(19,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(19,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-20">
+  <div class="comp-num">21</div>
+  <div class="comp-name">Competências de liderança e desenvolvimento de times</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(20,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(20,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(20,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(20,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(20,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-21">
+  <div class="comp-num">22</div>
+  <div class="comp-name">Entusiasmo e energia mobilizadora</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(21,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(21,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(21,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(21,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(21,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-22">
+  <div class="comp-num">23</div>
+  <div class="comp-name">Competências de delegação e descentralização de processos</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(22,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(22,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(22,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(22,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(22,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-23">
+  <div class="comp-num">24</div>
+  <div class="comp-name">Competências de apresentação, oratória e clareza de exposição</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(23,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(23,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(23,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(23,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(23,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-24">
+  <div class="comp-num">25</div>
+  <div class="comp-name">Senso de humor, leveza e inteligência social no ambiente de trabalho</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(24,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(24,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(24,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(24,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(24,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-25">
+  <div class="comp-num">26</div>
+  <div class="comp-name">Construção de novas relações</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(25,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(25,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(25,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(25,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(25,5,this)">5</button>
+  </div>
+</div>
+<div class="group-header">04 · Execução e Propósito</div>
+<div class="comp-row" id="row-26">
+  <div class="comp-num">27</div>
+  <div class="comp-name">Gestão de tempo e prioridade</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(26,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(26,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(26,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(26,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(26,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-27">
+  <div class="comp-num">28</div>
+  <div class="comp-name">Definição clara de objetivos e metas</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(27,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(27,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(27,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(27,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(27,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-28">
+  <div class="comp-num">29</div>
+  <div class="comp-name">Capacidade de execução e foco em fazer as coisas acontecerem</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(28,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(28,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(28,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(28,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(28,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-29">
+  <div class="comp-num">30</div>
+  <div class="comp-name">Clareza consciente sobre o que é verdadeiramente importante para mim</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(29,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(29,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(29,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(29,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(29,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-30">
+  <div class="comp-num">31</div>
+  <div class="comp-name">Clareza de visão sobre o que desejo alcançar</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(30,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(30,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(30,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(30,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(30,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-31">
+  <div class="comp-num">32</div>
+  <div class="comp-name">Autoconhecimento profundo sobre as próprias limitações e pontos cegos</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(31,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(31,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(31,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(31,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(31,5,this)">5</button>
+  </div>
+</div>
+<div class="comp-row" id="row-32">
+  <div class="comp-num">33</div>
+  <div class="comp-name">Equilíbrio e integração entre vida profissional e pessoal</div>
+  <div class="score-btns">
+    <button type="button" class="score-btn s1" onclick="setScore(32,1,this)">1</button>
+    <button type="button" class="score-btn s2" onclick="setScore(32,2,this)">2</button>
+    <button type="button" class="score-btn s3" onclick="setScore(32,3,this)">3</button>
+    <button type="button" class="score-btn s4" onclick="setScore(32,4,this)">4</button>
+    <button type="button" class="score-btn s5" onclick="setScore(32,5,this)">5</button>
+  </div>
+</div>
+
+
+      <div class="submit-area">
+        <div class="error-msg" id="error-msg"></div>
+        <button type="button" class="btn-submit" onclick="validateAndSubmit()">Enviar avaliação</button>
+        <p class="submit-note">Suas respostas serão enviadas com segurança ao facilitador do programa.</p>
+      </div>
+
+      <div class="success" id="success-msg">
+        <div class="success-check">✓</div>
+        <div class="success-title">Avaliação enviada!</div>
+        <p class="success-sub">Obrigado, <span id="success-nome" style="font-weight:600;color:var(--navy);"></span>.<br>Suas respostas foram registradas com sucesso.<br>O facilitador receberá os resultados em breve.</p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+const TOTAL = 33;
+const scores = {};
+
+function setScore(idx, score, btn) {
+  scores[idx] = score;
+  // Limpa seleção anterior neste grupo
+  btn.closest('.score-btns').querySelectorAll('.score-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  // Atualiza o hidden input correspondente
+  const input = document.getElementById('val-' + idx);
+  if (input) input.value = score;
+  // Marca linha como respondida
+  document.getElementById('row-' + idx).classList.add('answered');
+  updateProgress();
+}
+
+function updateProgress() {
+  const done = Object.keys(scores).length;
+  const pct = (done / TOTAL) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = done + ' de ' + TOTAL + ' competências avaliadas';
+}
+
+function validateAndSubmit() {
+  const nome = document.getElementById('f-nome').value.trim();
+  const errorEl = document.getElementById('error-msg');
+
+  if (!nome) {
+    errorEl.textContent = 'Por favor, informe seu nome completo antes de enviar.';
+    errorEl.style.display = 'block';
+    document.getElementById('f-nome').focus();
+    return;
+  }
+
+  const done = Object.keys(scores).length;
+  if (done < TOTAL) {
+    const faltam = TOTAL - done;
+    if (!confirm('Faltam ' + faltam + ' competência(s) sem avaliação.\nDeseja enviar assim mesmo?')) return;
+  }
+
+  errorEl.style.display = 'none';
+
+  // Submete o formulário via FormSubmit
+  const form = document.getElementById('mainForm');
+
+  // Mostra sucesso após breve delay
+  const nome_val = nome;
+  form.addEventListener('submit', function() {
+    setTimeout(() => {
+      document.querySelectorAll('.comp-row, .group-header, .progress-wrap').forEach(el => el.style.display = 'none');
+      document.querySelector('.submit-area').style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
+      document.getElementById('success-nome').textContent = nome_val;
+    }, 800);
+  }, {once: true});
+
+  form.submit();
+}
+
+// Data de hoje
+document.getElementById('f-data').valueAsDate = new Date();
+</script>
+</body>
+</html>
